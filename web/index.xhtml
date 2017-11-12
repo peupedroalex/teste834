@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="100">
+                <center><h1> Sistema Bancario </h1></center>
+            </p:layoutUnit>
+            <p:layoutUnit position="west" size="200" rendered="true" collapsible="true" resizable="true" closable="true" header="Menu">
+                <h:form>
+                    <p:commandLink value ="Novo Cliente" onclick="PF('dlgConta').show()"  />
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <h:form prependId="false">
+                    <p:dialog widgetVar="dlgConta" resizable="false" header="Agenda Contatos" height="250" width="400">
+
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Nome "/>
+                            <p:inputText id="nome" value="#{controller.conta.nome_cliente}" onfocus="this.value='';"/>
+
+                            <h:outputText value="CPF "/>
+                            <p:inputText id="cpf" value="#{controller.conta.cpf}" onfocus="this.value='';" />
+
+                            <p:commandButton value="Salvar" id="salva" actionListener="#{controller.adicionar(actionEvent)}" update="contas" oncomplete="PF('dlgConta').hide()"/>
+                        </p:panelGrid>
+
+                    </p:dialog>
+
+                    <p:dataTable id="contas" value="#{controller.listaConta}" var="conta">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome"/>
+                            </f:facet>
+                            <h:outputText value="#{conta.nome_cliente}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="CPF"/>
+                            </f:facet>
+                            <h:outputText value="#{conta.cpf}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Excluir"/>
+                            </f:facet>
+                            <p:commandLink value="Excluir" action="#{controller.excluir()}" onclick="if(!confirm('Deseja excluir o contato #{conta.nome_cliente}?')) return false;" update="contas"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:layoutUnit>    
+        </p:layout>
+    </h:body>
+</html>
+
